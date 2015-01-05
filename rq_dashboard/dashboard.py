@@ -177,7 +177,7 @@ def list_queues():
 def list_jobs(queue_name, page):
     current_page = int(page)
     queue = Queue(queue_name)
-    per_page = 5
+    per_page = 20
     total_items = queue.count
     pages_numbers_in_window = pagination_window(total_items, current_page, per_page)
     pages_in_window = [ dict(number=p, url=url_for('.overview',
