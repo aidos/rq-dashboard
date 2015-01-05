@@ -207,9 +207,16 @@ def list_jobs(queue_name, page):
 def list_workers():
     def serialize_queue_names(worker):
         return [q.name for q in worker.queues]
-
+    def current_job(worker):
+        try:
+            job = worker.get_current_job()
+            if job:
+                return ': {}'.format(job.description)
+        except Exception as e:
+            return str(e)
+        return ''
     workers = [dict(name=worker.name, queues=serialize_queue_names(worker),
-        state=worker.get_state()) for worker in Worker.all()]
+        state=worker.get_state(), current_job=current_job(worker)) for worker in Worker.all()]
     return dict(workers=workers)
 
 @dashboard.context_processor
